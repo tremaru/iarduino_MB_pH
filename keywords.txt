@@ -1,0 +1,46 @@
+#	####################################################
+#	СИНТАКСИЧЕСКАЯ РАСКРАСКА ДЛЯ БИБИЛИОТЕКИ:
+#	iarduino_MB_pH
+#	####################################################
+#	ТИПЫ ДАННЫХ:							   (KEYWORD1)
+	iarduino_MB_pH	KEYWORD1
+#	####################################################
+#	МЕТОДЫ И ФУНКЦИИ:						   (KEYWORD2)
+	begin	KEYWORD2
+	reset	KEYWORD2
+	changeID	KEYWORD2
+	setSpeedMB	KEYWORD2
+	ackSpeedMB	KEYWORD2
+	setTypeMB	KEYWORD2
+	ackTypeMB	KEYWORD2
+	writeFlash	KEYWORD2
+	readFlash	KEYWORD2
+	getID	KEYWORD2
+	getVersion	KEYWORD2
+	getPWR	KEYWORD2
+	setIDLED	KEYWORD2
+	getErr	KEYWORD2
+	setCalibration	KEYWORD2
+	getCalibration	KEYWORD2
+	getResultCalib	KEYWORD2
+	getStability	KEYWORD2
+	getKnownPH	KEYWORD2
+	setKnownPH	KEYWORD2
+	getKy	KEYWORD2
+	setKy	KEYWORD2
+	getVstp	KEYWORD2
+	setVstp	KEYWORD2
+	getVin	KEYWORD2
+	getVout	KEYWORD2
+	getVn	KEYWORD2
+	getPHn	KEYWORD2
+	setPHn	KEYWORD2
+	getPH	KEYWORD2
+#	####################################################
+#	КОНСТАНТЫ:								   (LITERAL1)
+	DEF_MODEL_pH	LITERAL1
+	ERR_MB_pH_Power	LITERAL1
+	ERR_MB_pH_Jumps	LITERAL1
+	ERR_MB_pH_Vout	LITERAL1
+	ERR_MB_pH_Vin	LITERAL1
+	ERR_MB_pH_5V	LITERAL1
