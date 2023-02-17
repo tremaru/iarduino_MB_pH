@@ -19,19 +19,17 @@ void setup(){                                                                   
 }                                                                                  //   Если адрес не указан sensor.begin(), то он будет найден, но это займёт некоторое время.
                                                                                    //
 void loop(){                                                                       //
-     Serial.println( F("Кислотность = pHn + (Vn-Vout)/(Vstep*Ky)") );              //   Формула по которой модуль вычисляет кислотность жидкости.
-     Serial.print  ( F("            = "                          ) );              //
-     Serial.print  ( sensor.getPHn()         , 1                   );              //   pHn  - Нейтральная кислотность щупа - кислотность при которой на выводах щупа нет разности потенциалов.
-     Serial.print  ( "+("                                          );              //
-     Serial.print  ( sensor.getVn()          , 2                   );              //   Vn   - Напряжение на выходе усилителя при нейтральной кислотности жидкости.
-     Serial.print  ( "-"                                           );              //
-     Serial.print  ( sensor.getVout()        , 2                   );              //   Vout - Напряжение на выходе усилителя.
-     Serial.print  ( ")/("                                         );              //
-     Serial.print  ( sensor.getVstp()/1000.0 , 5                   );              //   Vstp - Отношение напряжения щупа к кислотности жидкости мВ/pH.
-     Serial.print  ( "*"                                           );              //
-     Serial.print  ( sensor.getKy()          , 0                   );              //   Ky   - Коэффициент усиления усилителя к которому подключён щуп.
-     Serial.print  ( ") = "                                        );              //
-     Serial.print  ( sensor.getPH()          , 1                   );              //   pH   - Рассчитанная кислотность жидкости в которую опущен щуп.
-     Serial.println( " pH.\r\n"                                    );              //
+     Serial.println( F("Кислотность =  pHn  - ( Vout - Vin  ) / Vstep") );         //   Формула по которой модуль вычисляет кислотность жидкости.
+     Serial.print  ( F("            = "                               ) );         //
+     Serial.print  ( sensor.getPHn()         , 3                        );         //   pHn  - Нейтральная кислотность щупа - кислотность при которой на выводах щупа нет разности потенциалов.
+     Serial.print  ( " - ("                                             );         //
+     Serial.print  ( sensor.getVout()        , 4                        );         //   Vout - Напряжение на выходе датчика.
+     Serial.print  ( "-"                                                );         //
+     Serial.print  ( sensor.getVin()         , 4                        );         //   Vin  - Напряжение на входе датчика.
+     Serial.print  ( ") / "                                             );         //
+     Serial.print  ( sensor.getVstp()/1000.0 , 5                        );         //   Vstp - Чувствительность щупа (отношение напряжения щупа к кислотности жидкости) мВ/pH.
+     Serial.print  ( " = "                                              );         //
+     Serial.print  ( sensor.getPH()          , 1                        );         //   pH   - Рассчитанная кислотность жидкости в которую опущен щуп.
+     Serial.println( " pH.\r\n"                                         );         //
      delay(1000);                                                                  //
 }                                                                                  //
