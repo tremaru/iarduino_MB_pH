@@ -36,11 +36,12 @@
 									//	╠═══════════════╬═══════╣
 #define AO_KNOWN_PH_1	0			//	║ AO_KNOWN_PH_1 ║ 04.000║ Известное pH, для 1 стадии калибровки.
 #define AO_KNOWN_PH_2	1			//	║ AO_KNOWN_PH_2 ║ 09.180║ Известное pH, для 2 стадии калибровки.
-									//	╟───────────────╫───────╢
 #define AO_VSTP			2			//	║ AO_VSTP       ║ 059.16║ Шаг смещения U датчика на 1pH  в сотых долях мВ. Смещение напряжения датчиком на 1 Vstp соответствует изменению кислотности на 1 pH.
 #define AO_PHN			3			//	║ AO_PHN        ║ 07.000║ Нейтральная кислотность датчика в тысячных долях. Кислотность жидкости при которой отсутствует смещение напряжения датчиком.
+#define AO_STABLE_PH	4			//	║ AO_STABLE_PH  ║ 00.002║ Допустимая флуктуация кислотности в тысячных долях pH. Если реальная флуктуация ниже, значит показания    стабильны (DI_STABLE_PH=1).
+#define AO_UNSTABLE_PH	5			//	║ AO_UNSTABLE_PH║ 00.003║ Высокая    флуктуация кислотности в тысячных долях pH. Если реальная флуктуация выше, значит показания не стабильны (DI_STABLE_PH=0).
 									//	╟───────────────╫───────╢
-#define AO_CALC_SAVE	4			//	║ AO_CALC_SAVE  ║   0   ║ Код разрешения записи калибровочных значений в Flash память. Сбрасывается автоматически. Должен быть установлен в значение (0x2709) при запуске калибровки и до записи калибровочных значений напрямую через регистры (без калибровки).
+#define AO_CALC_SAVE	6			//	║ AO_CALC_SAVE  ║   0   ║ Код разрешения записи калибровочных значений в Flash память. Сбрасывается автоматически. Должен быть установлен в значение (0x2709) при запуске калибровки и до записи калибровочных значений напрямую через регистры (без калибровки).
 									//	╟───────────────╫───────╢
 //						0x0100		//	║ AO_ACK_ID     ║   0   ║ Запись значения 0xF0A5 подтверждает смену адреса на шине. При чтении всегда возвращает 0.
 #define AO_ACK_SPEED	0x0101		//	║ AO_ACK_SPEED  ║   0   ║ Запись значения 0xF0A5 подтверждает смену скорости  шины. При чтении всегда возвращает 0.
@@ -187,6 +188,28 @@ int8_t	iarduino_MB_pH::getResultCalib(void){																				//
 int8_t	iarduino_MB_pH::getStability(void){																					//
 			objModbus->codeError=ERROR_SYNTAX; if( !valID ){ return -1; }													//	Ошибка синтаксиса, модуль не инициализирован.
 			return objModbus->discreteInputRead(valID, DI_STABLE_PH);														//	Возвращаем значение регистра "Discrete Inputs" DI[DI_STABLE_PH]. Функция возвращает прочитанное значение (0/1), или -1 при неудаче.
+}																															//
+																															//
+//		ФУНКЦИЯ ПОЛУЧЕНИЯ ГРАНИЦЫ ГИСТЕРЕЗИСА ФЛУКТУАЦИЙ:																	//	Возвращает границу флуктуаций pH по которой определяется флаг стабильности показаний pH, или -1 при провале чтения.
+float	iarduino_MB_pH::getFluctuation(uint8_t type){																		//	type - тип границы STABLE_PH/UNSTABLE_PH.
+			objModbus->codeError=ERROR_SYNTAX; if( !valID ){ return -1.0f; }												//	Ошибка синтаксиса, модуль не инициализирован.
+			float i= -1.0f;																									//
+			if( type==STABLE_PH   ){ i=(float)objModbus->holdingRegisterRead(valID, AO_STABLE_PH  ); }						//	Читаем регистр "Holding Register" AO[AO_STABLE_PH  ]. Функция возвращает прочитанное значение (0...65535), или -1 при неудаче.
+			if( type==UNSTABLE_PH ){ i=(float)objModbus->holdingRegisterRead(valID, AO_UNSTABLE_PH); }						//	Читаем регистр "Holding Register" AO[AO_UNSTABLE_PH]. Функция возвращает прочитанное значение (0...65535), или -1 при неудаче.
+			if( i>=0 ){ i/=1000.0f; } return i;																				//	Возврашаем границу флуктуаций кислотности полученную в тысячных долях pH.
+}																															//
+																															//
+//		ФУНКЦИЯ УСТАНОВКИ ГРАНИЦЫ ГИСТЕРЕЗИСА ФЛУКТУАЦИЙ:																	//	Возвращает результат записи границы флуктуаций: true-успех / false-провал.
+bool	iarduino_MB_pH::setFluctuation(uint8_t type, float pH){																//	type - тип границы STABLE_PH/UNSTABLE_PH, pH - значение флуктуации pH за пределами которого будет меняться флаг стабильности показаний pH.
+			bool i;																											//
+			objModbus->codeError=ERROR_SYNTAX; if( !valID ){ return false; }												//	Ошибка синтаксиса, модуль не инициализирован.
+			if( type!=STABLE_PH && type!=UNSTABLE_PH ){ return false; }														//	Возвращаем флаг ошибки синтаксиса.
+			if( pH<0.001f || pH>14.0f ){ return false; }																	//	Возвращаем флаг ошибки синтаксиса.
+			if( !objModbus->holdingRegisterWrite(valID, AO_CALC_SAVE, 0x2709) ){ return false; }							//	Записываем значение 0x2709 в регистр "Holding Register" AO[AO_CALC_SAVE]. Функция возвращает 1 при успехе, 0 при неудаче.
+			if( type==STABLE_PH   ){ i = objModbus->holdingRegisterWrite(valID, AO_STABLE_PH  , (uint16_t)(pH*1000.0) ); }	//	Записываем в регистр "Holding Register" AO[AO_STABLE_PH  ] кислотность в тысячных долях pH. Функция возвращает 1 при успехе, 0 при неудаче.
+			if( type==UNSTABLE_PH ){ i = objModbus->holdingRegisterWrite(valID, AO_UNSTABLE_PH, (uint16_t)(pH*1000.0) ); }	//	Записываем в регистр "Holding Register" AO[AO_UNSTABLE_PH] кислотность в тысячных долях pH. Функция возвращает 1 при успехе, 0 при неудаче.
+			delay(50);																										//	Ждём 50 мс, пока модуль не сохранит новые данные в flash память.
+			return i;																										//
 }																															//
 																															//
 //		ФУНКЦИЯ ПОЛУЧЕНИЯ PH КАЛИБРОВОЧНЫХ ЖИДКОСТЕЙ:																		//	Возвращает pH калибровочной жидкости, или -1 при провале чтения.

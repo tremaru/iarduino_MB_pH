@@ -24,6 +24,8 @@
 	getCalibration	KEYWORD2
 	getResultCalib	KEYWORD2
 	getStability	KEYWORD2
+	getFluctuation	KEYWORD2
+	setFluctuation	KEYWORD2
 	getKnownPH	KEYWORD2
 	setKnownPH	KEYWORD2
 	getVstp	KEYWORD2
@@ -43,3 +45,5 @@
 	ERR_MB_pH_Vin	LITERAL1
 	ERR_MB_pH_5V	LITERAL1
 	ERR_MB_pH_Init	LITERAL1
+	STABLE_PH	LITERAL1
+	UNSTABLE_PH	LITERAL1

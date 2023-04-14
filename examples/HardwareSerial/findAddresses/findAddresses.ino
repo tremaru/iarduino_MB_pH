@@ -15,7 +15,8 @@ void setup(){                                                                   
      Serial.println("Поиск устройств...");                                         //
 //   Выполняем поиск всех устройств на шине (занимает несколько секунд):           //
      modbus.findID();                                                              //   Ищем адреса всех устройств на шине.
-//   modbus.findID( DEF_MODEL_pH );                                                //   Ищем адреса всех устройств с идентификатором pH-метра DEF_MODEL_pH.
+//   modbus.findID( DEF_MODEL_pH );                                                //   Ищем адреса всех устройств с идентификатором pH-метра DEF_MODEL_pH.       (для блоков с дисплеем).
+//   modbus.findID( DEF_MODEL_pH_zummer );                                         //   Ищем адреса всех устройств с идентификатором pH-метра DEF_MODEL_pH_zummer (для блоков с зуммером).
      if( modbus.available() ){                                                     //
      //  Устройства найдены:                                                       //
          Serial.print("Найдено ");                                                 //

@@ -20,7 +20,8 @@ void setup(){                                                                   
 //   modbus.setTypeMB( MODBUS_RTU );                                               //   Указываем тип протокола Modbus: MODBUS_RTU (по умолчанию), или MODBUS_ASCII.
 //   Выполняем поиск всех pH-метров на шине (занимает несколько секунд):           //
      Serial.println("Поиск pH-метров ..." );                                       //
-     sum = modbus.findID( DEF_MODEL_pH );                                          //   Ищем адреса всех устройств с идентификатором pH-метра DEF_MODEL_pH.
+     sum = modbus.findID( DEF_MODEL_pH );                                          //   Ищем адреса всех устройств с идентификатором pH-метра DEF_MODEL_pH        (для блоков с дисплеем).
+//   sum = modbus.findID( DEF_MODEL_pH_zummer );                                   //   Ищем адреса всех устройств с идентификатором pH-метра DEF_MODEL_pH_zummer (для блоков с зуммером).
      uint8_t arrID[sum], num=0;                                                    //   Объявляем массив arrID для хранения найденных адресов.
      while( modbus.available() ){ arrID[num++]=modbus.read(); }                    //   Заполняем массив arrID найденными адресами.
      if( sum ){                                                                    //
