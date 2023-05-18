@@ -69,14 +69,16 @@
 bool	iarduino_MB_pH::begin(uint8_t id){																					//	id - адрес модуля на шине.
 			objModbus->codeError=ERROR_GATEWAY_NO_DEVICE;																	//	Ошибкой выполнения данной функции может быть только отсутствие устройства.
 		//	Самостоятельный поиск id устройства:																			//
-			if( id==0 )								{ if( objModbus->findID(DEF_MODEL_pH) ){ id=objModbus->read(); }}		//	Если адрес не указан, ищем адрес первого устройства с совпавшим идентификатором.
+			if( id==0 )								{ if( objModbus->findID(DEF_MODEL_pH       ) ){id=objModbus->read();}}	//	Если адрес не указан, ищем адрес первого устройства с совпавшим идентификатором.
+			if( id==0 )								{ if( objModbus->findID(DEF_MODEL_pH_zummer) ){id=objModbus->read();}}	//	Если адрес не указан, ищем адрес первого устройства с совпавшим идентификатором.
 		//	Проверяем устройство:																							//
 			if( id==0 )								{ return false; }														//	Адрес устройства не указан и не найден.
 			if( objModbus->getInfo(id)<15 )			{ return false; }														//	Устройство не найдено, или информация об устройстве неполная.
 			if( objModbus->read()!=0x77 )			{ return false; }														//	Идентификатор линейки устройств не соответствует устройствам iArduino.
 				objModbus->read();																							//	Индикатор пуска не проверяем (00=OFF, FF=ON).
 			if( objModbus->read()!=id )				{ return false; }														//	Адрес полученный из информации об устройстве не совпадает с фактическим адресом устройства.
-			if( objModbus->read()!=DEF_MODEL_pH)	{ return false; }														//	Идентификатор устройства не совпадает с DEF_MODEL_pH.
+			uint8_t model = objModbus->read();																				//	Получаем идентификатор модели устройства.
+			if( model!=DEF_MODEL_pH && model!=DEF_MODEL_pH_zummer ){ return false; }										//	Идентификатор устройства не совпадает с DEF_MODEL_pH и DEF_MODEL_pH_zummer.
 		//	Устройство прошло проверку:																						//
 			valID=id;																										//	Сохраняем адрес устройства.
 			valVers=objModbus->read();																						//	Сохраняем версию прошивки устройства.

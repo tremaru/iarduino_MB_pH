@@ -1,5 +1,5 @@
 //	Библиотека для работы с pH-метром iarduino Modbus: https://iarduino.ru/shop/Sensory-Datchiki/ph-Modbus.html
-//  Версия: 1.2.0
+//  Версия: 1.2.1
 //  Последнюю версию библиотеки Вы можете скачать по ссылке: https://iarduino.ru/file/599.html
 //  Подробное описание функции бибилиотеки доступно по ссылке: https://wiki.iarduino.ru/page/ph-sensor-modbus/
 //  Библиотека является собственностью интернет магазина iarduino.ru и может свободно использоваться и распространяться!
