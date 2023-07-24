@@ -22,6 +22,7 @@
 	getErr	KEYWORD2
 	setCalibration	KEYWORD2
 	getCalibration	KEYWORD2
+	setStopCalib	KEYWORD2
 	getResultCalib	KEYWORD2
 	getStability	KEYWORD2
 	getFluctuation	KEYWORD2
