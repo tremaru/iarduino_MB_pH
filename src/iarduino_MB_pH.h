@@ -1,5 +1,7 @@
-//	Библиотека для работы с pH-метром iarduino Modbus: https://iarduino.ru/shop/Sensory-Datchiki/ph-Modbus.html
-//  Версия: 1.2.4
+//	Библиотека для работы с pH-метром iarduino (датчиком кислотности жидкости) по шине Modbus:
+//	Датчик кислотности жидкости (pH-метр) с дисплеем, RS485/Modbus: https://iarduino.ru/shop/Sensory-Datchiki/ph-Modbus.html
+//	Датчик кислотности жидкости (pH-метр) без дисплея, RS485/Modbus: https://iarduino.ru/shop/Sensory-Datchiki/ph-Modbus-zumer.html
+//  Версия: 1.2.5
 //  Последнюю версию библиотеки Вы можете скачать по ссылке: https://iarduino.ru/file/599.html
 //  Подробное описание функции бибилиотеки доступно по ссылке: https://wiki.iarduino.ru/page/ph-sensor-modbus/
 //  Библиотека является собственностью интернет магазина iarduino.ru и может свободно использоваться и распространяться!
@@ -7,6 +9,8 @@
 //  в том числе и в некоммерческих целях, просим Вас опубликовать ссылку: http://iarduino.ru
 //  Автор библиотеки: Панькин Павел
 //  Если у Вас возникли технические вопросы, напишите нам: shop@iarduino.ru
+//	Дополнительно требуется установить библиотеку реализации протокола Modbus RTU/ASCII на шине UART->RS485: https://iarduino.ru/file/591.html
+
 
 #ifndef iarduino_MB_pH_h
 #define iarduino_MB_pH_h
